@@ -7,22 +7,39 @@ use App\Http\Requests\Api\V1\StoreTicketRequest;
 use App\Http\Requests\Api\V1\UpdateTicketRequest;
 use App\Http\Resources\V1\TicketResource;
 use App\Models\Ticket;
+use App\Services\ResourceFilterService;
 
 class TicketController extends Controller
 {
+    public function __construct(protected ResourceFilterService $filterService){}
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-      return TicketResource::collection(Ticket::all());
+//        if($this->action->include('author')){
+//            return TicketResource::collection(Ticket::with('user')->paginate(1));
+//        }
+//      return TicketResource::collection(Ticket::paginate(1));
+        return  $this->filterService->filter(
+            'index',
+            'author',
+            TicketResource::class,
+            new Ticket,
+            'user',
+            'paginate',
+            '5',
+        );
     }
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreTicketRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $ticket =  Ticket::create($validated);
+        return 'ok' ;
     }
 
     /**
@@ -30,7 +47,11 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        return  TicketResource::make($ticket);
+        return $this->filterService->filter('show',
+            'author',
+            TicketResource::class,
+            $ticket,
+            'user');
     }
 
     /**
@@ -46,6 +67,6 @@ class TicketController extends Controller
      */
     public function destroy(Ticket $ticket)
     {
-        //
+            //
     }
 }

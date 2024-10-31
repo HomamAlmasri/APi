@@ -26,6 +26,7 @@ class UserResource extends JsonResource
                     'updatedAt' => $this->updated_at,
                 ])
             ],
+                'include'=> TicketResource::collection($this->whenLoaded('tickets'))
         ];
     }
 }
