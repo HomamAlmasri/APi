@@ -46,14 +46,12 @@ class TicketResource extends JsonResource
                         ]
                     ]
                 ],
-
                 'links'=>
                 [
                     [
                         'self'=>route('tickets.show',['ticket'=> $this->id])
                     ]
                 ]
-
             ];
     }
 }
