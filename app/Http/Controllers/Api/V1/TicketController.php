@@ -20,8 +20,7 @@ class TicketController extends Controller
      */
     public function index(TicketFilter $filter)
     {
-
-        return TicketResource::collection(Ticket::Filter($filter)->paginate(4));
+        return TicketResource::collection(Ticket::Filter($filter)->get());
 //        if($this->action->include('author')){
 //            return TicketResource::collection(Ticket::with('user')->paginate(1));
 //        }
@@ -33,8 +32,6 @@ class TicketController extends Controller
 //            TicketResource::class,
 //            new Ticket,
 //            'user',
-//            'paginate',
-//            '5',
 //        );
     }
 
