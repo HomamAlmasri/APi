@@ -22,12 +22,12 @@ class Ticket extends Model
     }
 
 
-    protected static function boot()
-    {
-        parent::boot();
-        self::creating(function ($model){
-            $model->user_id = auth()->id();
-        });
-    }
+//    protected static function boot()
+//    {
+//        parent::boot();
+//        self::creating(function ($model){
+//            $model->user_id = auth()->id();
+//        });
+//    }
 
 }

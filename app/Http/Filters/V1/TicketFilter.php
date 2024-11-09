@@ -5,8 +5,7 @@ namespace App\Http\Filters\V1;
 class TicketFilter extends QueryFilter
 {
     protected $sortable=[
-      'title',
-      'createdAt'=>'created_at'
+      'title', 'status', 'updatedAt'=>'updated_at', 'createdAt'=>'created_at'
     ];
     public function include($value)
     {
@@ -29,6 +28,11 @@ class TicketFilter extends QueryFilter
     public function userId($value)
     {
         return $this->builder->where('user_id',$value);
+    }
+
+    public function ticketId($value)
+    {
+        return $this->builder->whereIn('id',explode(',',$value));
     }
 
 }

@@ -2,6 +2,9 @@
 namespace App\Http\Filters\V1;
 
 class AuthorFilter extends QueryFilter{
+    protected $sortable=[
+        'name','email', 'updatedAt'=>'updated_at', 'createdAt'=>'created_at'
+    ];
 
     public function include ($value)
     {

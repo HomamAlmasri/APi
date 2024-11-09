@@ -81,8 +81,5 @@ class AuthorController extends Controller
     {
         //
     }
-    public function authorTickets($author_id,TicketFilter $filter)
-    {
-        return TicketResource::collection(Ticket::where('user_id', $author_id)->filter($filter)->paginate());
-    }
+
 }

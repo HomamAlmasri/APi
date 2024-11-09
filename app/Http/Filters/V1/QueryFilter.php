@@ -49,10 +49,8 @@ abstract class QueryFilter{
                 continue;
             }
 
-            $columnName = $this->sortable[$sortAttribute] ?? null;
-                if($columnName === null){
-                    $columnName = $sortAttribute;
-                }
+            $columnName = $this->sortable[$sortAttribute] ?? $sortAttribute;
+
             $this->builder->orderBy($columnName ,$direction);
         }
     }
