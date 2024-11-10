@@ -85,8 +85,13 @@ class TicketController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ticket $ticket)
+    public function destroy($ticket_id)
     {
-            //
+        try {
+            Ticket::findOrFail($ticket_id)->delete();
+            return $this->ok('Ticket Deleted');
+        } catch (ModelNotFoundException $e){
+            return $this->ok('User not Found', );
+        }
     }
 }

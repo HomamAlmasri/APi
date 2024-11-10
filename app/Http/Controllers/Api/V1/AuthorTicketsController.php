@@ -29,4 +29,22 @@ class AuthorTicketsController extends Controller
         return new TicketResource(Ticket::create($model));
 
     }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($author_id,$ticket_id)
+    {
+        try {
+           $ticket= Ticket::findOrFail($ticket_id);
+
+            if ($ticket->user_id == $author_id) {
+                $ticket->delete();
+            return $this->ok('Ticket Deleted');
+            }
+            return $this->error("Ticket not found", 404);
+        } catch (ModelNotFoundException $e){
+            return $this->ok('User not Found', );
+        }
+    }
 }
