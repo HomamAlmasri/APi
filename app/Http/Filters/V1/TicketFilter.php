@@ -16,6 +16,9 @@ class TicketFilter extends QueryFilter
         return $this->builder->whereIn('status',explode(',',$value));
     }
 
+    public function title($value){
+        return $this->builder->where('title','LIKE','%'.$value.'%');
+    }
     public function createdAt($value)
     {
         $dates = explode(',', $value);
