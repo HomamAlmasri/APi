@@ -4,6 +4,7 @@ namespace App\Http\Filters\V1;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\isNull;
 
 abstract class QueryFilter{
 
@@ -28,6 +29,13 @@ abstract class QueryFilter{
     }
     protected function filter($arr)
     {
+
+//        dd($arr);
+        if($arr === null)
+        {
+            return $this->builder;
+        }
+
         foreach ($arr as $key => $value) {
             if (method_exists($this, $key)) {
                 $this->$key($value);
@@ -40,7 +48,7 @@ abstract class QueryFilter{
         $sortAttributes = explode(',',$value);
         foreach ($sortAttributes as $sortAttribute){
         $direction = 'asc';
-            if(str_starts_with($sortAttribute, '-')) {
+            if(str_starts_with($sortAttribute, '-' )) {
                 $direction='desc';
 
                 $sortAttribute = substr($sortAttribute , 1);

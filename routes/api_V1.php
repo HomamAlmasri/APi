@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->apiResource('tickets',TicketController::class);
 //-----------------------------------------TICKETS--------------------------------------------------------------
 
-
 //-----------------------------------------AUTHOR--------------------------------------------------------------
 Route::middleware('auth:sanctum')->apiResource('authors', AuthorController ::class);
 Route::middleware('auth:sanctum')->apiResource('authors.tickets', AuthorTicketsController::class);

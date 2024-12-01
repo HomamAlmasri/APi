@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\TicketStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Filters\V1\TicketFilter;
 use App\Http\Requests\Api\V1\StoreTicketRequest;
@@ -22,6 +23,7 @@ class TicketController extends Controller
      */
     public function index(TicketFilter $filter)
     {
+
         return TicketResource::collection(Ticket::Filter($filter)->get());
 //        if($this->action->include('author')){
 //            return TicketResource::collection(Ticket::with('user')->paginate(1));
@@ -87,7 +89,7 @@ class TicketController extends Controller
      */
     public function destroy($ticket_id)
     {
-        try {
+        try{
             Ticket::findOrFail($ticket_id)->delete();
             return $this->ok('Ticket Deleted');
         } catch (ModelNotFoundException $e){

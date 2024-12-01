@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1;
 
+use App\Enums\TicketStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -51,7 +52,8 @@ class TicketResource extends JsonResource
                     [
                         'self'=>route('tickets.show',['ticket'=> $this->id])
                     ]
-                ]
+                ],
+                'statuses'=>TicketStatus::values(),
             ];
     }
 }
