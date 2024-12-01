@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api\V1\Ticket;
 
+use App\Http\Requests\Api\V1\BaseTicketRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReplaceTicketRequest extends FormRequest
+class ReplaceTicketRequest extends BaseTicketRequest
 {
     /**
      * Determine if the user is authorized to make this request.

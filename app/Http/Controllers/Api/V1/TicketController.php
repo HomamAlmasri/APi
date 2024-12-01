@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Enums\TicketStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Filters\V1\TicketFilter;
-use App\Http\Requests\Api\V1\StoreTicketRequest;
-use App\Http\Requests\Api\V1\UpdateTicketRequest;
+use App\Http\Requests\Api\V1\Ticket\StoreTicketRequest;
+use App\Http\Requests\Api\V1\Ticket\UpdateTicketRequest;
 use App\Http\Resources\V1\TicketResource;
 use App\Models\Ticket;
 use App\Models\User;
@@ -53,14 +52,8 @@ class TicketController extends Controller
             'error' => 'This User Id is not found '
         ]);
         }
-        $model = [
-            'title' => $request->input('data.attributes.title'),
-            'description' => $request->input('data.attributes.description'),
-            'status' => $request->input('data.attributes.status'),
-            'user_id' => $request->input('data.relationships.author.data.id'),
-        ];
 //dd($request->validated(), $model);
-        return new TicketResource(Ticket::create($model));
+        return new TicketResource($request->mappedAttributes());
 
     }
 
@@ -81,18 +74,22 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
+        try{
+            $ticket = Ticket::findOrFail($ticket_id);
+
+            $ticket->update($request->mappedAttributes());
+            return new TicketResource($ticket);
+        } catch (ModelNotFoundException $e){
+            return $this->ok('User not Found', [
+                'error' => 'This Ticket is not found '
+            ]);
+        }
     }
     public function replace(UpdateTicketRequest $request, $ticket_id)
     {
         try{
             $ticket = Ticket::findOrFail($ticket_id);
-            $model = [
-                'title' => $request->input('data.attributes.title'),
-                'description' => $request->input('data.attributes.description'),
-                'status' => $request->input('data.attributes.status'),
-                'user_id' => $request->input('data.relationships.author.data.id'),
-            ];
-            $ticket->update($model);
+            $ticket->update($request->mappedAttributes());
             return new TicketResource($ticket);
         } catch (ModelNotFoundException $e){
             return $this->ok('User not Found', [
