@@ -21,8 +21,13 @@ class ReplaceTicketRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        $rules =
+            [
+                'data.attributes.title'              => 'required|string',
+                'data.attributes.description'        => 'required|string',
+                'data.attributes.status'             => 'required|string|in:A,C,H,X',
+                'data.relationships.author.data.id'  =>'required|string|exists:users,id',
+                ];
+        return $rules;
     }
 }

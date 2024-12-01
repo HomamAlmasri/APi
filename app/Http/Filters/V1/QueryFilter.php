@@ -29,7 +29,6 @@ abstract class QueryFilter{
     }
     protected function filter($arr)
     {
-
 //        dd($arr);
         if($arr === null)
         {
