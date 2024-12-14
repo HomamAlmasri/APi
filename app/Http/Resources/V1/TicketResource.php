@@ -38,7 +38,7 @@ class TicketResource extends JsonResource
                         'data'=>
                         [
                             'type'=> 'user',
-                            'ticketId'=> $this->id,
+                            'UserId'=> $this->user_id,
                         ],
                         'includes'=> UserResource::make($this->whenLoaded('author')),
                         'links'=>

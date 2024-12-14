@@ -8,27 +8,30 @@ use App\Http\Requests\Api\V1\Ticket\ReplaceTicketRequest;
 use App\Http\Requests\Api\V1\Ticket\StoreTicketRequest;
 use App\Http\Resources\V1\TicketResource;
 use App\Models\Ticket;
+use App\Policies\V1\TicketPolicy;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AuthorTicketsController extends Controller
 {
+
+    protected $policyClass = TicketPolicy::class ;
     public function index($author_id,TicketFilter $filter)
     {
         return TicketResource::collection(Ticket::where('user_id', $author_id)->filter($filter)->paginate());
     }
-    public function store($author_id, StoreTicketRequest $request)
+    public function store(StoreTicketRequest $request,$author_id)
+
     {
-        $model = [
-            'title'          => $request->input('data.attributes.title'),
-            'description'    => $request->input('data.attributes.description'),
-            'status'         => $request->input('data.attributes.status'),
-            'user_id'        => $author_id,
-        ];
-//dd($request->validated(), $model);
-        return new TicketResource(Ticket::create($model));
-
-    }
-
+        try {
+            $this->isAble('store',Ticket::class);
+            return new TicketResource(Ticket::create($request->mappedAttributes([
+                'author' => 'user_id'
+            ])));
+        }catch (AuthorizationException $e){
+            return $this->error('You are not a  authorized to perform this action',401);
+        }
+            }
 
     public function replace($author_id,$ticket_id, ReplaceTicketRequest $request)
     {

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\V1\Ticket;
 
 use App\Http\Requests\Api\V1\BaseTicketRequest;
+use App\Persmisions\V1\Abilities;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTicketRequest extends BaseTicketRequest
@@ -22,15 +23,34 @@ class StoreTicketRequest extends BaseTicketRequest
      */
     public function rules(): array
     {
+        $authorId = $this->routeIs('tickets.store') ? 'data.relationships.author.data.id' : 'author' ;
        $rules =
         [
             'data.attributes.title'              => 'required|string',
             'data.attributes.description'        => 'required|string',
             'data.attributes.status'             => 'required|string|in:A,C,H,X',
+            $authorId                            => 'required|integer|exists:users,id',
         ];
-        if($this->routeIs('ticket.store')) {
-            $rules['data.relationships.author.data.id']  = 'required|integer';
+       $user = $this->user();
+
+            if($user->tokenCan(Abilities::CreateOwnTicket)) {
+            $rules[$authorId]  .= '|size:'. $user->id;
         }
         return $rules;
     }
+//    public function messages(): array
+//    {
+//        return [
+//            'data.relationships.author.data.id' => 'Wrong User ID'
+//        ];
+//    }
+    protected function prepareForValidation()
+    {
+        if ($this->routeIs('authors.tickets.store')) {
+            $this->merge([
+                'author' => $this->route('author'),
+            ]);
+        }
+    }
+
 }
