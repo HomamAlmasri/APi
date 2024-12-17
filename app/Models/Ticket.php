@@ -31,5 +31,5 @@ class Ticket extends Model
 //            $model->user_id = auth()->id();
 //        });
 //    }
-
+//edits
 }
