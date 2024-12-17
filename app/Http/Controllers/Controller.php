@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Traits\ApiResponses;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 abstract class Controller
@@ -11,6 +12,11 @@ abstract class Controller
 
     protected $policyClass;
     public function isAble($ability,$targetModel){
-        return $this->authorize($ability,[$targetModel, $this->policyClass]);
+        try {
+          $this->authorize($ability,[$targetModel, $this->policyClass]);
+          return true;
+        }catch (AuthorizationException $ex){
+            return false ;
+        }
     }
 }

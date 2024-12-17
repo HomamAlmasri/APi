@@ -77,14 +77,16 @@ class TicketController extends Controller
         try{
             $ticket = Ticket::findOrFail($ticket_id);
             //policy
-             $this->isAble('update', $ticket);
-
-            $ticket->update($request->mappedAttributes());
-            return new TicketResource($ticket);
-        }
-        catch (AuthorizationException $e){
+            if($this->isAble('update',$ticket)){
+                $ticket->update($request->mappedAttributes());
+                return new TicketResource($ticket);
+            }
             return $this->error('You are not a  authorized to perform this action',401);
         }
+        catch (ModelNotFoundException $e){
+            return $this->error('Ticket Not Found',401);
+        }
+
     }
     public function replace(ReplaceTicketRequest $request, $ticket_id)
     {
